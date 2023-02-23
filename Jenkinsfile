@@ -20,8 +20,7 @@ podTemplate(containers: [
                     else {
                         echo "I am in the ${env.BRANCH_NAME} branch"
                         sh '''
-                        chmod +x gradlew
-                        ./gradlew Checkstylemain
+                        ls
                         sh '''
                     }
                 }
