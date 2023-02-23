@@ -12,13 +12,17 @@ podTemplate(containers: [
                 stage('Main Branch Unit Tests') {
                     if (env.BRANCH_NAME == 'main') {
                         echo "I am in the ${env.BRANCH_NAME} branch"
+                        sh '''
                         chmod +x gradlew
                         ./gradlew jacocoTestCoverageVerification
+                        '''
                     }
                     else {
                         echo "I am in the ${env.BRANCH_NAME} branch"
+                        sh '''
                         chmod +x gradlew
                         ./gradlew Checkstylemain
+                        sh '''
                     }
                 }
             }
