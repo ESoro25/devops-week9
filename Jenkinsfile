@@ -19,9 +19,11 @@ podTemplate(containers: [
 		./gradlew jacocoTestCoverageVerification
 		}
           }
-          stage('Feature Branch Unit Tests') {
+          stage('Other Branch Unit Tests') {
 		when {
-		    branch 'feature'
+		    not {
+		        branch 'feature'
+		    }	
 		}
 	    	steps {
             	echo "I am in the ${env.BRANCH_NAME} branch"
