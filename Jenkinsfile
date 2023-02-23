@@ -16,7 +16,7 @@ podTemplate(containers: [
                     steps {
                         echo "I am in the ${env.BRANCH_NAME} branch"
                         chmod + x gradlew
-                        ./ gradlew jacocoTestCoverageVerification
+                        ./gradlew jacocoTestCoverageVerification
                     }
                 }
                 stage('Other Branch Unit Tests') {
@@ -28,7 +28,7 @@ podTemplate(containers: [
                     steps {
                         echo "I am in the ${env.BRANCH_NAME} branch"
                         chmod + x gradlew
-                        ./ gradlew Checkstylemain
+                        ./gradlew Checkstylemain
                     }
                 }
             }
