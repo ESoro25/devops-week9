@@ -22,7 +22,7 @@ podTemplate(containers: [
           stage('Other Branch Unit Tests') {
 		when {
 		    not {
-		        branch 'feature'
+		        branch 'main'
 		    }	
 		}
 	    	steps {
