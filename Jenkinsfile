@@ -19,9 +19,7 @@ podTemplate(containers: [
                     }
                     else {
                         echo "I am in the ${env.BRANCH_NAME} branch"
-                        sh '''
                         ls
-                        sh '''
                     }
                 }
             }
