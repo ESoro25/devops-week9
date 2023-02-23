@@ -19,7 +19,7 @@ podTemplate(containers: [
 		./gradlew jacocoTestCoverageVerification
 		}
           }
-          stage('Main Branch Unit Tests') {
+          stage('Feature Branch Unit Tests') {
 		when {
 		    branch 'feature'
 		}
