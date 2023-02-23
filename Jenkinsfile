@@ -9,17 +9,19 @@ podTemplate(containers: [
     node(POD_LABEL) {
         stage('Run pipeline against a gradle project') {
             container('gradle') {
-                stage('Main Branch Unit Tests') {
+                git 'https://github.com/ESoro25/devops-week6'
+                sh '''
+                chmod +x gradlew
+                ./gradlew compileJava
+                '''
+                stage('Unit Tests') {
                     if (env.BRANCH_NAME == 'main') {
                         echo "I am in the ${env.BRANCH_NAME} branch"
-                        sh '''
-                        chmod +x gradlew
-                        ./gradlew jacocoTestCoverageVerification
-                        '''
+                        sh './gradlew jacocoTestCoverageVerification'
                     }
                     else {
                         echo "I am in the ${env.BRANCH_NAME} branch"
-                        sh 'ls'
+                        sh './gradlew Checkstylemain'
                     }
                 }
             }
