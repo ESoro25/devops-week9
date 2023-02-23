@@ -7,14 +7,14 @@ podTemplate(containers: [
     ),
 ]) {
     node(POD_LABEL) {
-        stage('Run pipeline against a gradle project) {
+        stage('Run pipeline against a gradle project') {
             container('gradle') {
                 stage('Main Branch Unit Tests') {
                     when {
                         branch 'main'
                     }
                     steps {
-                        echo "I am in the ${env.BRANCH_NAME} branch"
+                        echo 'I am in the ${env.BRANCH_NAME} branch'
                         chmod + x gradlew
                         ./gradlew jacocoTestCoverageVerification
                     }
@@ -26,7 +26,7 @@ podTemplate(containers: [
                         }
                     }
                     steps {
-                        echo "I am in the ${env.BRANCH_NAME} branch"
+                        echo 'I am in the ${env.BRANCH_NAME} branch'
                         chmod + x gradlew
                         ./gradlew Checkstylemain
                     }
