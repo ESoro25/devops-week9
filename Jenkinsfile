@@ -14,9 +14,11 @@ podTemplate(containers: [
                         branch 'main'
                     }
                     steps {
+                        sh '''
                         echo 'I am in the ${env.BRANCH_NAME} branch'
-                        chmod + x gradlew
+                        chmod +x gradlew
                         ./gradlew jacocoTestCoverageVerification
+                        '''
                     }
                 }
                 stage('Other Branch Unit Tests') {
@@ -26,9 +28,11 @@ podTemplate(containers: [
                         }
                     }
                     steps {
+                        sh '''
                         echo 'I am in the ${env.BRANCH_NAME} branch'
-                        chmod + x gradlew
+                        chmod +x gradlew
                         ./gradlew Checkstylemain
+                        '''
                     }
                 }
             }
