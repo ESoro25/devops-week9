@@ -10,18 +10,14 @@ podTemplate(containers: [
         stage('Run pipeline against a gradle project') {
             container('gradle') {
                 stage('Main Branch Unit Tests') {
-                    when { branch 'main' }
-                    steps {
+                    if (env.BRANCH_NAME == 'main') {
                         sh '''
                         echo "I am in the ${env.BRANCH_NAME} branch"
                         chmod +x gradlew
                         ./gradlew jacocoTestCoverageVerification
                         '''
                     }
-                }
-                stage('Other Branch Unit Tests') {
-                    when { not { branch 'main' }  }
-                    steps {
+                    else {
                         sh '''
                         echo "I am in the ${env.BRANCH_NAME} branch"
                         chmod +x gradlew
