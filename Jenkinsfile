@@ -1,5 +1,6 @@
 pipeline {
-    agent kubernetes {
+    agent {
+        kubernetes {
         yaml '''
     kind: Pod
     spec:
@@ -36,6 +37,7 @@ pipeline {
         - key: .dockerconfigjson
         path: config.json
         '''
+        }
     }
     stages {
         stage('Main Branch Tests') {
