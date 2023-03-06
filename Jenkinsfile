@@ -47,7 +47,6 @@ pipeline {
                 sh '''
                 ./gradlew build
                 cp ./build/libs/calculator-0.0.1-SNAPSHOT.jar /mnt
-
                 ./gradlew test
                 ./gradlew jacocoTestCoverageVerification
                 ./gradlew CheckstyleMain
