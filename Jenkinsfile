@@ -77,6 +77,7 @@ pipeline {
                 ./gradlew test
                 ./gradlew CheckstyleMain
                 '''  
+                }
             }
             post {
                 success {
@@ -96,8 +97,7 @@ pipeline {
             when { branch 'playground'}
             steps {
                 echo 'Nothing to run in playground branch.'
-                }
             }
         }
     }
-} 
+}
