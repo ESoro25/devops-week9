@@ -95,7 +95,8 @@ pipeline {
             when { branch 'playground'}
             steps {
                 echo 'Nothing to run in playground branch.'
+                }
             }
         }
     }
-}
+} 
