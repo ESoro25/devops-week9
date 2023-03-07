@@ -41,18 +41,39 @@ spec:
         }
     }
     stages {
-        stage('Main Branch Tests') {
-            when { branch 'main'}
+        stage('Build Grade') {
+            when {not { branch 'playground'}}
             steps {
-                container('gradle') {
                 sh '''
                 ./gradlew build
                 cp ./build/libs/calculator-0.0.1-SNAPSHOT.jar /mnt
-                ./gradlew test
-                ./gradlew jacocoTestCoverageVerification
-                ./gradlew CheckstyleMain
-                '''  
-                } 
+                '''
+            }
+        }
+        stage('Main Branch') {
+            when { branch 'main'}
+            stages {
+                stage('Unit Test') {
+                    steps {
+                        container('gradle') {
+                        sh './gradlew test'
+                        }
+                    }
+                }
+                stage('Code Coverage Test') {
+                    steps {
+                        container('gradle') {
+                        sh './gradlew jacocoTestCoverageVerification'
+                        }
+                    }
+                }
+                stage('Checkstyle Test') {
+                    steps {
+                        container('gradle') {
+                        sh './gradlew CheckstyleMain'
+                        }
+                    }
+                }
             }
             post {
                 success {
@@ -70,14 +91,20 @@ spec:
         }
         stage('Feature Branch Tests') {
             when { branch 'feature'}
-            steps {
-                container('gradle') {
-                sh '''
-                ./gradlew build
-                cp ./build/libs/calculator-0.0.1-SNAPSHOT.jar /mnt
-                ./gradlew test
-                ./gradlew CheckstyleMain
-                '''  
+            stages {
+                stage('Unit Test') {
+                    steps {
+                        container('gradle') {
+                        sh './gradlew test'
+                        }
+                    }
+                }
+                stage('Checkstyle Test') {
+                    steps {
+                        container('gradle') {
+                        sh './gradlew CheckstyleMain'
+                        }
+                    }
                 }
             }
             post {
