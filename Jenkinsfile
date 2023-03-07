@@ -44,10 +44,12 @@ spec:
         stage('Build Grade') {
             when {not { branch 'playground'}}
             steps {
+                container('gradle') {    
                 sh '''
                 ./gradlew build
                 cp ./build/libs/calculator-0.0.1-SNAPSHOT.jar /mnt
                 '''
+                }
             }
         }
         stage('Main Branch') {
