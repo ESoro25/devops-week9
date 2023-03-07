@@ -89,7 +89,7 @@ spec:
                 }
             }
         }
-        stage('Feature Branch Tests') {
+        stage('Feature Branch') {
             when { branch 'feature'}
             stages {
                 stage('Unit Test') {
