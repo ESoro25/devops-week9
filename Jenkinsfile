@@ -4,8 +4,8 @@ pipeline {
         yaml '''
     kind: Pod
     spec:
-        containers:
-        - name: gradle
+      containers:
+      - name: gradle
         image: gradle:6.3-jdk14
         command:
         - sleep
@@ -14,28 +14,28 @@ pipeline {
         volumeMounts:
         - name: shared-storage
         mountPath: /mnt
-        - name: kaniko
+      - name: kaniko
         image: gcr.io/kaniko-project/executor:debug
         command:
         - sleep
         args:
         - 9999999
         volumeMounts:
-            - name: shared-storage
-            mountPath: /mnt
-            - name: kaniko-secret
-            mountPath: /kaniko/.docker
-            restartPolicy: Never
-    volumes:
         - name: shared-storage
-        persistentVolumeClaim:
-        claimName: jenkins-pv-claim-new
+        mountPath: /mnt
         - name: kaniko-secret
-        secret:
+        mountPath: /kaniko/.docker
+      restartPolicy: Never
+      volumes:
+        - name: shared-storage
+          persistentVolumeClaim:
+            claimName: jenkins-pv-claim-new
+        - name: kaniko-secret
+          secret:
             secretName: dockercred
-        items:
-        - key: .dockerconfigjson
-        path: config.json
+            items:
+            - key: .dockerconfigjson
+              path: config.json
         '''
         }
     }
