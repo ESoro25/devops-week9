@@ -48,7 +48,6 @@ spec:
                 sh '''
                 ./gradlew build
                 cp ./build/libs/calculator-0.0.1-SNAPSHOT.jar /mnt
-                echo "I am in the ${env.BRANCH_NAME} branch"
                 '''
                 }
             }
