@@ -41,6 +41,7 @@ spec:
             steps {
                 sh '''
                 ./kubectl get pods -n staging
+                sleep 30
                 echo 'Sum Test'
                 curl calculator-service.staging.svc.cluster.local:8080/sum?a=3\\&b=4
                 echo 'Div Test'
