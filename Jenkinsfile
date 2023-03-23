@@ -7,126 +7,35 @@ kind: Pod
 spec: 
   containers: 
   - name: gradle 
-    image: gradle:6.3-jdk14 
+    image: gradle:jdk8 
     command: 
     - sleep 
     args: 
     - 99d 
-    volumeMounts: 
-    - name: shared-storage 
-      mountPath: /mnt         
-  - name: kaniko 
-    image: gcr.io/kaniko-project/executor:debug 
-    command: 
-    - sleep 
-    args: 
-    - 9999999 
-    volumeMounts: 
-    - name: shared-storage 
-      mountPath: /mnt 
-    - name: kaniko-secret 
-      mountPath: /kaniko/.docker 
   restartPolicy: Never 
-  volumes: 
-  - name: shared-storage 
-    persistentVolumeClaim: 
-      claimName: jenkins-pv-claim-new 
-  - name: kaniko-secret 
-    secret: 
-        secretName: dockercred 
-        items: 
-        - key: .dockerconfigjson 
-          path: config.json
         '''
         }
     }
     stages {
-        stage('Build Grade') {
-            when {not { branch 'playground'}}
+        stage('Update Calculator') {
             steps {
-                container('gradle') {    
                 sh '''
-                ./gradlew build
-                cp ./build/libs/calculator-0.0.1-SNAPSHOT.jar /mnt
+                curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+                chmod +x kubectl
+                echo 'Updating Calculator...'
+                ./kubectl apply -f calculator.yaml -n staging
                 '''
-                }
             }
         }
-        stage('Main Branch') {
-            when { branch 'main'}
-            stages {
-                stage('Unit Test') {
-                    steps {
-                        container('gradle') {
-                        sh './gradlew test'
-                        }
-                    }
-                }
-                stage('Code Coverage Test') {
-                    steps {
-                        container('gradle') {
-                        sh './gradlew jacocoTestCoverageVerification'
-                        }
-                    }
-                }
-                stage('Checkstyle Test') {
-                    steps {
-                        container('gradle') {
-                        sh './gradlew CheckstyleMain'
-                        }
-                    }
-                }
-            }
-            post {
-                success {
-                    container('kaniko') {
-                    sh '''
-                    echo 'FROM openjdk:8-jre' > Dockerfile
-                    echo 'COPY ./calculator-0.0.1-SNAPSHOT.jar app.jar' >> Dockerfile
-                    echo 'ENTRYPOINT ["java", "-jar", "app.jar"]' >> Dockerfile
-                    mv /mnt/calculator-0.0.1-SNAPSHOT.jar .
-                    /kaniko/executor --context `pwd` --destination esoro25/calculator:1.0
-                    '''    
-                    }
-                }
-            }
-        }
-        stage('Feature Branch') {
-            when { branch 'feature'}
-            stages {
-                stage('Unit Test') {
-                    steps {
-                        container('gradle') {
-                        sh './gradlew test'
-                        }
-                    }
-                }
-                stage('Checkstyle Test') {
-                    steps {
-                        container('gradle') {
-                        sh './gradlew CheckstyleMain'
-                        }
-                    }
-                }
-            }
-            post {
-                success {
-                    container('kaniko') {
-                    sh '''
-                    echo 'FROM openjdk:8-jre' > Dockerfile
-                    echo 'COPY ./calculator-0.0.1-SNAPSHOT.jar app.jar' >> Dockerfile
-                    echo 'ENTRYPOINT ["java", "-jar", "app.jar"]' >> Dockerfile
-                    mv /mnt/calculator-0.0.1-SNAPSHOT.jar .
-                    /kaniko/executor --context `pwd` --destination esoro25/calculator-feature:0.1
-                    '''    
-                    }
-                }
-            }
-        }
-        stage('Playground Branch') {
-            when { branch 'playground'}
+        stage('Validate Update') {
             steps {
-                echo 'Nothing to run in playground branch.'
+                sh '''
+                ./kubectl get pods -n staging
+                echo 'Sum Test'
+                test $(curl calculator-service.staging.svc.cluster.local:8080/sum?a=3\\&b=4) -eq 7 && echo 'pass' || echo 'fail'
+                echo 'Div Test'
+                test $(curl calculator-service.staging.svc.cluster.local:8080/div?a=6\\&b=3) -eq 3 && echo 'pass' || echo 'fail'
+                '''
             }
         }
     }
