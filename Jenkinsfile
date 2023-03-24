@@ -7,7 +7,7 @@ pipeline {
     spec:
     containers:
     - name: gradle 
-      image: gradle:6.3-jdk14
+      image: gradle:jdk8
       command: 
       - sleep 
       args: 
