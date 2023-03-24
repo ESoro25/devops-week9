@@ -1,42 +1,42 @@
 pipeline {
     agent {
         kubernetes {
-        yaml: '''
-apiVersion: v1
-kind: Pod
-spec:
-  containers:
-  - name: gradle 
-    image: gradle:6.3-jdk14
-    command: 
-    - sleep 
-    args: 
-    - 99d 
-    volumeMounts:
+            yaml: '''
+    apiVersion: v1
+    kind: Pod
+    spec:
+    containers:
+    - name: gradle 
+        image: gradle:6.3-jdk14
+        command: 
+        - sleep 
+        args: 
+        - 99d 
+        volumeMounts:
+        - name: shared-storage
+          mountPath: /mnt
+    - name: cloud-sdk
+        image: google/cloud-sdk
+        command:
+        - sleep
+        args:
+        - 9999999
+        volumeMounts:
+        - name: shared-storage
+          mountPath: /mnt
+        - name: google-cloud-key
+          mountPath: /var/secrets/google
+        env:
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /var/secrets/google/devops-381618-7c42d8f9ea22.json
+    restartPolicy: Never
+    volumes:
     - name: shared-storage
-      mountPath: /mnt
-  - name: cloud-sdk
-    image: google/cloud-sdk
-    command:
-    - sleep
-    args:
-    - 9999999
-    volumeMounts:
-    - name: shared-storage
-      mountPath: /mnt
+        persistentVolumeClaim:
+          claimName: jenkins-pv-claim-new
     - name: google-cloud-key
-      mountPath: /var/secrets/google
-    env:
-    - name: GOOGLE_APPLICATION_CREDENTIALS
-      value: /var/secrets/google/devops-381618-7c42d8f9ea22.json
-  restartPolicy: Never
-  volumes:
-  - name: shared-storage
-    persistentVolumeClaim:
-      claimName: jenkins-pv-claim-new
-  - name: google-cloud-key
-    secret:
-      secretName: sdk-key
+        secret:
+          secretName: sdk-key
             '''
         }
     }
