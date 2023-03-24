@@ -7,28 +7,28 @@ pipeline {
     spec:
     containers:
     - name: gradle 
-        image: gradle:6.3-jdk14
-        command: 
-        - sleep 
-        args: 
-        - 99d 
-        volumeMounts:
-        - name: shared-storage
-          mountPath: /mnt
+      image: gradle:6.3-jdk14
+      command: 
+      - sleep 
+      args: 
+      - 99d 
+      volumeMounts:
+      - name: shared-storage
+        mountPath: /mnt
     - name: cloud-sdk
-        image: google/cloud-sdk
-        command:
-        - sleep
-        args:
-        - 9999999
-        volumeMounts:
-        - name: shared-storage
-          mountPath: /mnt
-        - name: google-cloud-key
-          mountPath: /var/secrets/google
-        env:
-        - name: GOOGLE_APPLICATION_CREDENTIALS
-          value: /var/secrets/google/devops-381618-7c42d8f9ea22.json
+      image: google/cloud-sdk
+      command:
+      - sleep
+      args:
+      - 9999999
+      volumeMounts:
+      - name: shared-storage
+        mountPath: /mnt
+      - name: google-cloud-key
+        mountPath: /var/secrets/google
+      env:
+      - name: GOOGLE_APPLICATION_CREDENTIALS
+        value: /var/secrets/google/devops-381618-7c42d8f9ea22.json
     restartPolicy: Never
     volumes:
     - name: shared-storage
