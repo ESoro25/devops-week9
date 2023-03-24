@@ -32,12 +32,12 @@ pipeline {
     restartPolicy: Never
     volumes:
     - name: shared-storage
-        persistentVolumeClaim:
-          claimName: jenkins-pv-claim-new
+      persistentVolumeClaim:
+        claimName: jenkins-pv-claim-new
     - name: google-cloud-key
-        secret:
-          secretName: sdk-key
-            '''
+      secret:
+        secretName: sdk-key
+          '''
         }
     }
     stages {
