@@ -47,9 +47,9 @@ pipeline {
                 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
                 chmod +x kubectl
                 echo 'Starting Calculator...'
-                ./kubectl apply -f calculator.yaml -n default
+                ./kubectl apply -f calculator.yaml
                 echo 'Starting Hazelcast...'
-                ./kubectl apply -f hazelcast.yaml -n default
+                ./kubectl apply -f hazelcast.yaml
                 '''
             }
         }
@@ -72,8 +72,8 @@ pipeline {
                 sh '''
                 gcloud auth login --cred-file=$GOOGLE_APPLICATION_CREDENTIALS
                 gcloud container clusters get-credentials devops-cluster --region us-east1 --project devops-381618
-                kubectl apply -f calculator.yaml
-                kubectl apply -f hazelcast.yaml
+                kubectl apply -f calculator.yaml -n default
+                kubectl apply -f hazelcast.yaml -n default
                 '''
             }
         }
