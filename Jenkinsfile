@@ -60,7 +60,7 @@ pipeline {
                     cd Chapter09/sample3
                     chmod +x gradlew
                     ./gradlew build
-                    ./gradlew smokeTest -Dcalculator.url=http://calculator-service.staging.svc.cluster.local:8080
+                    ./gradlew smokeTest -Dcalculator.url=http://calculator-service:8080
                     ''' 
                 }
             }
