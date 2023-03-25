@@ -28,7 +28,7 @@ pipeline {
           mountPath: /var/secrets/google
         env:
         - name: GOOGLE_APPLICATION_CREDENTIALS
-          value: /var/secrets/google/devops-381618-7c42d8f9ea22.json
+          value: /var/secrets/google/devops-381618-6b708d9f41b6.json
       restartPolicy: Never
       volumes:
       - name: shared-storage
